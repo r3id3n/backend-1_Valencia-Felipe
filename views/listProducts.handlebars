@@ -1,0 +1,24 @@
+<div class="container">
+  <h1>Products</h1>
+  <div class="controls">
+    <label for="sort" class="control-label">Sort by Price:</label>
+    <select id="sort" class="control-select">
+      <option value="">None</option>
+      <option value="asc">Ascending</option>
+      <option value="desc">Descending</option>
+    </select>
+    <label for="limit" class="control-label">Items per Page:</label>
+    <select id="limit" class="control-select">
+      <option value="5" selected>5</option>
+      <option value="10">10</option>
+      <option value="20">20</option>
+    </select>
+    <button id="apply-filters" class="control-button">Apply</button>
+  </div>
+  <div id="product-list"></div>
+  <div class="pagination-container">
+    <button id="prev-page" class="pagination-btn">Previous</button>
+    <span id="page-info"></span>
+    <button id="next-page" class="pagination-btn">Next</button>
+  </div>
+</div>

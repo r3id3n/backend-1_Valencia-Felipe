@@ -1,0 +1,38 @@
+<div class="container">
+  <h1>Edit Product</h1>
+  <form id="edit-product-form">
+    <input type="hidden" id="edit-product-id" />
+    <div>
+      <label for="edit-title">Title</label>
+      <input type="text" id="edit-title" name="title" required />
+    </div>
+    <div>
+      <label for="edit-description">Description</label>
+      <input type="text" id="edit-description" name="description" required />
+    </div>
+    <div>
+      <label for="edit-code">Code</label>
+      <input type="text" id="edit-code" name="code" required />
+    </div>
+    <div>
+      <label for="edit-price">Price</label>
+      <input type="number" id="edit-price" name="price" required />
+    </div>
+    <div>
+      <label for="edit-status">Status</label>
+      <select id="edit-status" name="status">
+        <option value="true">Available</option>
+        <option value="false">Unavailable</option>
+      </select>
+    </div>
+    <div>
+      <label for="edit-stock">Stock</label>
+      <input type="number" id="edit-stock" name="stock" required />
+    </div>
+    <div>
+      <label for="edit-category">Category</label>
+      <input type="text" id="edit-category" name="category" required />
+    </div>
+    <button type="submit">Update Product</button>
+  </form>
+</div>
