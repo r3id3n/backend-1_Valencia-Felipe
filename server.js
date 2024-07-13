@@ -10,10 +10,13 @@ const cartsRouter = require("./api/carts");
 // Configuración de la aplicación Express
 const app = express();
 const PORT = process.env.PORT || 8080;
+require("dotenv").config();
+
 // Conexión a MongoDB Atlas
 mongoose
   .connect(
-    "mongodb+srv://r3id3n2091:r3id3n2091@aniwear.i4ffyt6.mongodb.net/aniwear?retryWrites=true&w=majority"
+    process.env.MONGODB_URI
+    // "mongodb+srv://r3id3n2091:r3id3n2091@aniwear.i4ffyt6.mongodb.net/aniwear?retryWrites=true&w=majority"
   )
   .then(() => {
     console.log("Conexión exitosa a MongoDB Atlas");
