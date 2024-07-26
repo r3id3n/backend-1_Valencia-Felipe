@@ -17,22 +17,26 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const { productId, quantity } = req.body;
-    let cart = await Cart.findOne();
-    if (!cart) {
-      cart = new Cart({ products: [] });
-    }
+    let cart = await Cart.findOne({ "products.product": productId });
     const product = await Product.findById(productId);
-    const existingProduct = cart.products.find(
-      (p) => p.product.toString() === productId
-    );
-    if (existingProduct) {
+
+    if (!product) {
+      return res.status(404).json({ status: "error", message: "Product not found" });
+    }
+
+    if (cart) {
+      const existingProduct = cart.products.find(p => p.product.toString() === productId);
       existingProduct.quantity += quantity;
     } else {
-      cart.products.push({ product: productId, quantity });
+      cart = new Cart({
+        products: [{ product: productId, quantity }]
+      });
     }
+
     product.stock -= quantity;
     await product.save();
     await cart.save();
+
     res.status(201).json({ status: "success", cart });
   } catch (error) {
     res.status(500).json({ status: "error", message: "Error adding to cart" });
@@ -43,10 +47,16 @@ router.post("/", async (req, res) => {
 router.put("/products/:id", async (req, res) => {
   try {
     const { quantity } = req.body;
-    let cart = await Cart.findOne();
+    const cart = await Cart.findOne({ "products.product": req.params.id });
+
+    if (!cart) {
+      return res.status(404).json({ status: "error", message: "Cart not found" });
+    }
+
     const productIndex = cart.products.findIndex(
       (p) => p.product.toString() === req.params.id
     );
+
     if (productIndex !== -1) {
       const product = await Product.findById(req.params.id);
       if (cart.products[productIndex].quantity <= quantity) {
@@ -60,9 +70,7 @@ router.put("/products/:id", async (req, res) => {
       await cart.save();
       res.json({ status: "success", cart });
     } else {
-      res
-        .status(404)
-        .json({ status: "error", message: "Product not found in cart" });
+      res.status(404).json({ status: "error", message: "Product not found in cart" });
     }
   } catch (error) {
     res.status(500).json({ status: "error", message: "Error updating cart" });
@@ -72,10 +80,16 @@ router.put("/products/:id", async (req, res) => {
 // Eliminar un producto del carrito
 router.delete("/products/:id", async (req, res) => {
   try {
-    let cart = await Cart.findOne();
+    const cart = await Cart.findOne({ "products.product": req.params.id });
+
+    if (!cart) {
+      return res.status(404).json({ status: "error", message: "Cart not found" });
+    }
+
     const productIndex = cart.products.findIndex(
       (p) => p.product.toString() === req.params.id
     );
+
     if (productIndex !== -1) {
       const product = await Product.findById(req.params.id);
       product.stock += cart.products[productIndex].quantity;
@@ -84,14 +98,10 @@ router.delete("/products/:id", async (req, res) => {
       await cart.save();
       res.json({ status: "success", cart });
     } else {
-      res
-        .status(404)
-        .json({ status: "error", message: "Product not found in cart" });
+      res.status(404).json({ status: "error", message: "Product not found in cart" });
     }
   } catch (error) {
-    res
-      .status(500)
-      .json({ status: "error", message: "Error removing product from cart" });
+    res.status(500).json({ status: "error", message: "Error removing product from cart" });
   }
 });
 

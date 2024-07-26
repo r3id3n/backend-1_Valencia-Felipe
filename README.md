@@ -15,20 +15,26 @@ Cómo Empezar:
 
 Clonar el Repositorio:
 git clone https://github.com/r3id3n/backend-1_Valencia-Felipe
-Usa el código con precaución.
-
 
 Instalar Dependencias:
 npm install
 
-Usa el código con precaución.
 Configurar Conexión a Mongo Atlas:
 
 Crea un clúster en Mongo Atlas y obtén la cadena de conexión.
 Reemplaza la cadena de conexión en el archivo de configuración de la aplicación.
 
 Ejecutar el Proyecto:
-node server.js
-Usa el código con precaución.
+node src/server.js
 
 La aplicación se ejecutará en http://localhost:8080/list-products por defecto.
+
+*******************************************************************************************************
+Modificaciones.
+Validadores del campo addProduct
+Creación de carpeta src, encapsulando los repositorios de forma ordenada.
+Creación de carpeta routes en paralelo a las vistas creadas en handlebars
+Modificación en api/carts - routes/cart para el ingreso de productos a la base de datos Mongo Atlas agregando carritos por ID.
+Información validada en la base de datos atlas 
+Collections/aniwear.carts
+las cantidades de producto en stock se va modificando en base al ingreso de carro de compras, a su vez al momento de eliminar producto del carro esta se va agregando al stock del producto.

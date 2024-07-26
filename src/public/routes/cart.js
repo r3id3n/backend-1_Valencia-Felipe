@@ -11,42 +11,39 @@ const fetchCart = () => {
 
 const renderCart = (carts) => {
   const cartList = document.getElementById("cart-list");
-  const totalPriceElement = document.getElementById("total-price");
   cartList.innerHTML = "";
   let totalPrice = 0;
-  carts.forEach((cart) => {
+
+  carts.forEach((cart, index) => {
+    const cartDiv = document.createElement("div");
+    cartDiv.classList.add("cart");
+    cartDiv.innerHTML = `<h2>Cart ${index + 1}</h2>`;
+    
     cart.products.forEach((item) => {
       if (item.product) {
         const cartItemDiv = document.createElement("div");
         cartItemDiv.classList.add("cart-item");
         cartItemDiv.innerHTML = `
-            <h2>${item.product.title}</h2>
-            <p>Quantity: ${item.quantity}</p>
-            <p>Price: $${item.product.price}</p>
-            <p>Total: $${item.product.price * item.quantity}</p>
-            <div class="form-group">
-              <label for="quantity-${
-                item.product._id
-              }">Quantity to Remove</label>
-              <input type="number" class="quantity-to-remove" id="quantity-${
-                item.product._id
-              }" min="1" max="${
-          item.quantity
-        }" value="1" placeholder="Enter quantity to remove" title="Quantity to Remove">
-            </div>
-            <button class="btn btn-warning remove-quantity-from-cart" data-id="${
-              item.product._id
-            }">Remove Quantity</button>
-            <button class="btn btn-danger remove-from-cart" data-id="${
-              item.product._id
-            }">Remove Product</button>
-          `;
-        cartList.appendChild(cartItemDiv);
+          <h2>${item.product.title}</h2>
+          <p>Quantity: ${item.quantity}</p>
+          <p>Price: $${item.product.price}</p>
+          <p>Total: $${item.product.price * item.quantity}</p>
+          <div class="form-group">
+            <label for="quantity-${item.product._id}">Quantity to Remove</label>
+            <input type="number" class="quantity-to-remove" id="quantity-${item.product._id}" min="1" max="${item.quantity}" value="1" placeholder="Enter quantity to remove" title="Quantity to Remove">
+          </div>
+          <button class="btn btn-warning remove-quantity-from-cart" data-id="${item.product._id}">Remove Quantity</button>
+          <button class="btn btn-danger remove-from-cart" data-id="${item.product._id}">Remove Product</button>
+        `;
+        cartDiv.appendChild(cartItemDiv);
         totalPrice += item.product.price * item.quantity;
       }
     });
+
+    cartList.appendChild(cartDiv);
   });
-  totalPriceElement.textContent = totalPrice;
+
+  document.getElementById("total-price").textContent = totalPrice;
 
   document.querySelectorAll(".remove-quantity-from-cart").forEach((button) => {
     button.addEventListener("click", handleRemoveQuantityFromCart);
@@ -59,9 +56,7 @@ const renderCart = (carts) => {
 
 const handleRemoveQuantityFromCart = (event) => {
   const productId = event.target.getAttribute("data-id");
-  const quantityInput = event.target.previousElementSibling.querySelector(
-    ".quantity-to-remove"
-  );
+  const quantityInput = event.target.previousElementSibling.querySelector(".quantity-to-remove");
   const quantity = parseInt(quantityInput.value, 10);
 
   fetch(`/api/carts/products/${productId}`, {
@@ -80,9 +75,7 @@ const handleRemoveQuantityFromCart = (event) => {
         alert("Failed to remove quantity from cart");
       }
     })
-    .catch((error) =>
-      console.error("Error removing quantity from cart:", error)
-    );
+    .catch((error) => console.error("Error removing quantity from cart:", error));
 };
 
 const handleRemoveFromCart = (event) => {
@@ -100,9 +93,7 @@ const handleRemoveFromCart = (event) => {
         alert("Failed to remove product from cart");
       }
     })
-    .catch((error) =>
-      console.error("Error removing product from cart:", error)
-    );
+    .catch((error) => console.error("Error removing product from cart:", error));
 };
 
 window.fetchCart = fetchCart;
